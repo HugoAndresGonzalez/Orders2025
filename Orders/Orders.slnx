@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Order.Fronted/Order.Fronted.csproj" />
+  <Project Path="Order.Shared/Order.Shared.csproj" />
+  <Project Path="Orders.Backend/Orders.Backend.csproj" />
+</Solution>
