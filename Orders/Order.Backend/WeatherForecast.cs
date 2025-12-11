@@ -1,4 +1,4 @@
-namespace Orders.Backend
+namespace Order.Backend
 {
     public class WeatherForecast
     {
