@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Backend.Data;
+using Order.Backend.Helpers;
 using Order.Backend.Repositories.Interfaces;
+using Order.Shared.DTO;
 using Order.Shared.Responses;
 using System;
 
@@ -129,6 +131,30 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return new ActionResponse<T>
         {
             Message = "Ya existe el registro."
+        };
+    }
+
+    public async Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+
+        return new ActionResponse<IEnumerable<T>>
+        {
+            IsSuccess = true,
+            Result = await queryable
+            .Paginate(pagination)
+            .ToListAsync()
+        };
+    }
+
+    public async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+        double count = await queryable.CountAsync();
+        return new ActionResponse<int>
+        {
+            IsSuccess = true,
+            Result = (int)count
         };
     }
 }

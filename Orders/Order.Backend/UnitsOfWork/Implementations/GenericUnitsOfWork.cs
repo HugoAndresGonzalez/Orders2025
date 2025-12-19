@@ -2,6 +2,7 @@
 
 using Order.Backend.Repositories.Interfaces;
 using Order.Backend.UnitsOfWork.Interfaces;
+using Order.Shared.DTO;
 using Order.Shared.Responses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,6 +23,12 @@ public class GenericUnitsOfWork<T> : IGenericUnitsOfWork<T> where T : class
     public virtual async Task<ActionResponse<T>> GetAsync(int id) => await _repository.GetAsync(id);
 
     public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync() => await _repository.GetAsync();
+
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination) =>
+        await _repository.GetAsync(pagination);
+
+    public virtual async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination) =>
+     await _repository.GetTotalRecordsAsync(pagination);
 
     public virtual async Task<ActionResponse<T>> UpdateAsync(T entity) => await _repository.UpdateAsync(entity);
 }

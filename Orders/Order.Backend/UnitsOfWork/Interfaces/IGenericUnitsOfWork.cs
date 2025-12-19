@@ -1,9 +1,14 @@
-﻿using Order.Shared.Responses;
+﻿using Order.Shared.DTO;
+using Order.Shared.Responses;
 
 namespace Order.Backend.UnitsOfWork.Interfaces
 {
     public interface IGenericUnitsOfWork<T> where T : class
     {
+        Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination);
+
+        Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination);
+
         Task<ActionResponse<T>> GetAsync(int id);
 
         Task<ActionResponse<IEnumerable<T>>> GetAsync();
