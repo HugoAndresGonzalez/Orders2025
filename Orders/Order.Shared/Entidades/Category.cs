@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Order.Shared.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Order.Shared.Entidades
 {
-    public class Category
+    public class Category : IEntityWithName
     {
         public int Id { get; set; }
 

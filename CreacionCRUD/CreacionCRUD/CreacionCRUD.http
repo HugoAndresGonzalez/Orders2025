@@ -1,0 +1,6 @@
+@CreacionCRUD_HostAddress = http://localhost:5212
+
+GET {{CreacionCRUD_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

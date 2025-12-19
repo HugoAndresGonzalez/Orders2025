@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Order.Backend.Data;
 using Order.Backend.UnitsOfWork.Interfaces;
@@ -10,7 +11,33 @@ namespace Order.Backend.Controllers;
 [Route("api/[controller]")]
 public class CountriesController : GenericController<Country>
 {
-    public CountriesController(IGenericUnitsOfWork<Country> UnitsOfWork) : base(UnitsOfWork)
+    private readonly ICountriesUnitOfWork _countriesUnitOfWork;
+
+    public CountriesController(IGenericUnitsOfWork<Country> UnitsOfWork, ICountriesUnitOfWork
+        countriesUnitOfWork) : base(UnitsOfWork)
     {
+        _countriesUnitOfWork = countriesUnitOfWork;
+    }
+
+    [HttpGet]
+    public override async Task<IActionResult> GetAsync()
+    {
+        var action = await _countriesUnitOfWork.GetAsync();
+        if (action.IsSuccess)
+        {
+            return Ok(action.Result);
+        }
+        return BadRequest(action.Message);
+    }
+
+    [HttpGet("{id}")]
+    public override async Task<IActionResult> GetAsync(int id)
+    {
+        var action = await _countriesUnitOfWork.GetAsync(id);
+        if (action.IsSuccess)
+        {
+            return Ok(action.Result);
+        }
+        return NotFound();
     }
 }

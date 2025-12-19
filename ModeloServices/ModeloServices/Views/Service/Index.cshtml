@@ -1,0 +1,33 @@
+﻿@model List<ModeloServices.Models.ServiceVM>
+@{
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.name
+            </td>
+            <td>
+                @item.type
+            </td>
+            <td> </td>
+        </tr>
+        }
+    </tbody>
+
+</table>
