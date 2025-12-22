@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Backend.Data;
+using Order.Backend.Helpers;
 using Order.Backend.Repositories.Implementations;
 using Order.Backend.Repositories.Interfaces;
+using Order.Shared.DTO;
 using Order.Shared.Entidades;
 using Order.Shared.Responses;
 
@@ -14,6 +16,37 @@ public class StatesRepository : GenericRepository<State>, IStatesRepository
     public StatesRepository(DataContext context) : base(context)
     {
         _context = context;
+    }
+
+    public override async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+    {
+        var queryable = _context.States
+            .Where(x => x.Country!.Id == pagination.Id)
+            .AsQueryable();
+
+        double count = await queryable.CountAsync();
+        return new ActionResponse<int>
+        {
+            IsSuccess = true,
+            Result = (int)count
+        };
+    }
+
+    public override async Task<ActionResponse<IEnumerable<State>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _context.States
+            .Include(s => s.Cities)
+            .Where(x => x.Country!.Id == pagination.Id)
+            .AsQueryable();
+
+        return new ActionResponse<IEnumerable<State>>
+        {
+            IsSuccess = true,
+            Result = await queryable
+            .OrderBy(x => x.Name)
+            .Paginate(pagination)
+            .ToListAsync()
+        };
     }
 
     public override async Task<ActionResponse<IEnumerable<State>>> GetAsync()

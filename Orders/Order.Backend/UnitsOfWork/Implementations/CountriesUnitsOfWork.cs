@@ -2,12 +2,17 @@
 using Order.Shared.Entidades;
 using Order.Backend.Repositories.Interfaces;
 using Order.Shared.Responses;
+using Order.Shared.DTO;
 
 namespace Order.Backend.UnitsOfWork.Implementations;
 
 public class CountriesUnitsOfWork : GenericUnitsOfWork<Country>, ICountriesUnitOfWork
 {
     private readonly ICountriesRepository _countriesRepository;
+
+
+    public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination) =>
+        await _countriesRepository.GetAsync(pagination);
 
     public CountriesUnitsOfWork(IGenericRepository<Country> repository, ICountriesRepository countriesRepository) : base(repository)
     {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Backend.Data;
+using Order.Backend.Helpers;
 using Order.Backend.Repositories.Interfaces;
+using Order.Shared.DTO;
 using Order.Shared.Entidades;
 using Order.Shared.Responses;
 
@@ -27,6 +29,22 @@ public class CountryRepository : GenericRepository<Country>, ICountriesRepositor
         };
     }
 
+    public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = _contex.Countries
+            .Include(c => c.States)
+            .AsQueryable();
+
+        return new ActionResponse<IEnumerable<Country>>
+        {
+            IsSuccess = true,
+            Result = await queryable
+            .OrderBy(x => x.Name)
+            .Paginate(pagination)
+            .ToListAsync()
+        };
+
+    }
     public override async Task<ActionResponse<Country>> GetAsync(int id)
     {
         var country = await _contex.Countries
